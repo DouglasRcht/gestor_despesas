@@ -1,36 +1,75 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Fluxo Financeiro
 
-## Getting Started
+Aplicacao base de controle de despesas financeiras criada com Next.js App Router, TailwindCSS e Firebase Firestore. A interface foi organizada para servir como base de aula, com dashboard responsivo, formulario manual, area reservada para escaneamento via camera e testes iniciais com Jest.
 
-First, run the development server:
+## Tecnologias
+
+- Next.js 16 com App Router
+- React 19
+- TailwindCSS 4
+- Firebase Firestore
+- Jest + React Testing Library
+
+## Estrutura
+
+```text
+src/
+  app/
+  components/
+  services/
+  __tests__/
+```
+
+## Como rodar
+
+1. Instale as dependencias:
+
+```bash
+npm install
+```
+
+2. Crie um arquivo `.env.local` usando `.env.example` como base e preencha as credenciais do Firebase:
+
+```bash
+cp .env.example .env.local
+```
+
+3. Rode a aplicacao:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+4. Execute lint e testes:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run lint
+npm run test
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Firebase
 
-## Learn More
+O projeto espera as seguintes variaveis de ambiente:
 
-To learn more about Next.js, take a look at the following resources:
+- `NEXT_PUBLIC_FIREBASE_API_KEY`
+- `NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN`
+- `NEXT_PUBLIC_FIREBASE_PROJECT_ID`
+- `NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET`
+- `NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID`
+- `NEXT_PUBLIC_FIREBASE_APP_ID`
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+As despesas sao gravadas na colecao `expenses`.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Vercel
 
-## Deploy on Vercel
+O projeto esta pronto para deploy na Vercel:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- `vercel.json` define o framework como `nextjs`
+- `.env.example` facilita o cadastro das variaveis no painel da Vercel
+- Scripts de `build`, `start`, `lint` e `test` ja estao configurados
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Testes incluidos
+
+- Validacao do formulario manual quando os campos obrigatorios estao vazios
+- Envio do formulario manual com payload normalizado e limpeza dos campos
+- Esqueleto `test.skip` para o fluxo futuro de camera/OCR
