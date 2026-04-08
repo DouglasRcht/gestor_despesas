@@ -1,5 +1,4 @@
 import {
-  addDoc,
   collection,
   deleteDoc,
   doc,
@@ -35,21 +34,14 @@ function getExpensesCollection() {
 }
 
 export async function createExpense(expenseInput: ExpenseInput) {
-  const expensesCollection = getExpensesCollection();
-  const normalizedExpense = {
-    amount: Number(expenseInput.amount),
-    category: expenseInput.category.trim(),
-    createdAt: Date.now(),
-    date: expenseInput.date,
-    title: expenseInput.title.trim(),
-  };
+  void expenseInput;
 
-  const createdExpense = await addDoc(expensesCollection, normalizedExpense);
-
-  return {
-    ...normalizedExpense,
-    id: createdExpense.id,
-  };
+  // TODO implement: validar regras de negocio para saidas manuais e saidas por OCR.
+  // TODO implement: persistir a despesa no Firestore mantendo createdAt para ordenacao.
+  // TODO implement: retornar o documento criado para refletir no dashboard.
+  throw new Error(
+    "TODO implement: conclua a feature de saidas antes de salvar no Firestore.",
+  );
 }
 
 export async function deleteExpense(id: string) {

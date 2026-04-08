@@ -99,15 +99,15 @@ export function ReceiptUploadPanel({
     <section className="glass-panel animate-enter rounded-[36px] border border-[color:var(--border)] px-5 py-6 sm:px-7 sm:py-7">
       <div className="flex flex-col gap-3">
         <div>
-          <p className="section-eyebrow">Upload de nota fiscal</p>
+          <p className="section-eyebrow">Feature 03</p>
           <h2 className="mt-3 text-2xl font-semibold text-[color:var(--foreground)]">
-            Saida por foto ou PDF antes da camera
+            Saida por leitura de PDF ou imagem
           </h2>
         </div>
         <p className="text-sm leading-7 text-[color:var(--muted)]">
-          Este fluxo intermedio prepara a turma para a etapa de OCR. A base ja
-          aceita o arquivo e envia a nota para a rota de extracao, mas o
-          mapeamento final ainda esta marcado com `TODO implement`.
+          O fluxo de upload, a rota de extracao e o servico cliente ja existem,
+          mas a leitura real da nota fiscal e o salvamento da despesa ainda
+          estao marcados com `TODO implement`.
         </p>
       </div>
 

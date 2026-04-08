@@ -1,21 +1,21 @@
 "use client";
 
 import { useState, type ChangeEvent, type FormEvent } from "react";
+import { getTodayDateString } from "@/services/expense-types";
 import {
-  expenseCategories,
-  getTodayDateString,
-  type ExpenseInput,
-} from "@/services/expense-types";
+  incomeSources,
+  type IncomeEntryInput,
+} from "@/services/income-entry-types";
 
-interface ManualExpenseFormProps {
-  onSubmitExpense: (expense: ExpenseInput) => Promise<void>;
+interface IncomeEntryFormProps {
+  onSubmitIncomeEntry: (incomeEntry: IncomeEntryInput) => Promise<void>;
   isSubmitting?: boolean;
 }
 
 interface FormState {
   title: string;
   amount: string;
-  category: string;
+  source: string;
   date: string;
 }
 
@@ -29,8 +29,8 @@ type FormErrors = Partial<Record<keyof FormState, string>>;
 function createInitialFormState(): FormState {
   return {
     amount: "",
-    category: expenseCategories[0],
     date: getTodayDateString(),
+    source: incomeSources[0],
     title: "",
   };
 }
@@ -40,33 +40,33 @@ function validateForm(state: FormState): FormErrors {
   const parsedAmount = Number(state.amount);
 
   if (!state.title.trim()) {
-    nextErrors.title = "Informe o titulo da despesa.";
+    nextErrors.title = "Informe a descricao da entrada.";
   }
 
   if (!state.amount || Number.isNaN(parsedAmount) || parsedAmount <= 0) {
     nextErrors.amount = "Digite um valor maior que zero.";
   }
 
-  if (!state.category.trim()) {
-    nextErrors.category = "Selecione uma categoria.";
+  if (!state.source.trim()) {
+    nextErrors.source = "Selecione a origem da entrada.";
   }
 
   if (!state.date) {
-    nextErrors.date = "Informe a data da compra.";
+    nextErrors.date = "Informe a data da entrada.";
   }
 
   return nextErrors;
 }
 
-export function ManualExpenseForm({
+export function IncomeEntryForm({
   isSubmitting = false,
-  onSubmitExpense,
-}: ManualExpenseFormProps) {
+  onSubmitIncomeEntry,
+}: IncomeEntryFormProps) {
   const [formState, setFormState] = useState<FormState>(createInitialFormState);
   const [errors, setErrors] = useState<FormErrors>({});
   const [feedback, setFeedback] = useState<FormFeedback | null>({
     message:
-      "TODO implement: esta feature deve ser concluida pelos alunos com validacao, testes e persistencia.",
+      "TODO implement: esta feature deve ser concluida pelos alunos com persistencia, testes e deploy controlado.",
     tone: "neutral",
   });
 
@@ -93,22 +93,22 @@ export function ManualExpenseForm({
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
       setFeedback({
-        message: "Revise os campos destacados antes de salvar.",
+        message: "Revise os campos destacados antes de cadastrar a entrada.",
         tone: "error",
       });
       return;
     }
 
     try {
-      await onSubmitExpense({
+      await onSubmitIncomeEntry({
         amount: Number(formState.amount),
-        category: formState.category,
         date: formState.date,
+        source: formState.source,
         title: formState.title.trim(),
       });
 
       setFeedback({
-        message: "Despesa cadastrada com sucesso.",
+        message: "Entrada cadastrada com sucesso.",
         tone: "success",
       });
       setErrors({});
@@ -118,7 +118,7 @@ export function ManualExpenseForm({
         message:
           error instanceof Error
             ? error.message
-            : "Nao foi possivel salvar a despesa no momento.",
+            : "Nao foi possivel salvar a entrada no momento.",
         tone: "error",
       });
     }
@@ -128,14 +128,14 @@ export function ManualExpenseForm({
     <section className="glass-panel animate-enter rounded-[36px] border border-[color:var(--border)] px-5 py-6 sm:px-7 sm:py-7">
       <div className="flex flex-col gap-3">
         <div>
-          <p className="section-eyebrow">Feature 02</p>
+          <p className="section-eyebrow">Feature 01</p>
           <h2 className="mt-3 text-2xl font-semibold text-[color:var(--foreground)]">
-            Saida manual
+            Cadastro de entradas
           </h2>
         </div>
         <p className="text-sm leading-7 text-[color:var(--muted)]">
-          O formulario ja esta montado, mas o salvamento definitivo das saidas
-          ficou como desafio da turma dentro do `expense-service.ts`.
+          A interface e a estrutura do hook ja estao preparadas, mas a gravacao
+          das entradas ainda esta marcada com `TODO implement` para a turma.
         </p>
       </div>
 
@@ -143,17 +143,17 @@ export function ManualExpenseForm({
         <div className="space-y-2">
           <label
             className="text-sm font-medium text-[color:var(--foreground)]"
-            htmlFor="title"
+            htmlFor="income-title"
           >
-            Titulo da despesa
+            Descricao da entrada
           </label>
           <input
             aria-invalid={Boolean(errors.title)}
             className="w-full rounded-[22px] border border-[rgba(31,42,34,0.14)] bg-white/88 px-4 py-3 outline-none transition focus:border-[color:var(--accent-forest)] focus:ring-4 focus:ring-[rgba(31,138,112,0.12)]"
-            id="title"
+            id="income-title"
             name="title"
             onChange={handleInputChange}
-            placeholder="Ex.: Mercado semanal"
+            placeholder="Ex.: Pagamento do cliente"
             type="text"
             value={formState.title}
           />
@@ -168,15 +168,14 @@ export function ManualExpenseForm({
           <div className="space-y-2">
             <label
               className="text-sm font-medium text-[color:var(--foreground)]"
-              htmlFor="amount"
+              htmlFor="income-amount"
             >
-              Valor total (R$)
+              Valor da entrada (R$)
             </label>
             <input
               aria-invalid={Boolean(errors.amount)}
               className="w-full rounded-[22px] border border-[rgba(31,42,34,0.14)] bg-white/88 px-4 py-3 outline-none transition focus:border-[color:var(--accent-forest)] focus:ring-4 focus:ring-[rgba(31,138,112,0.12)]"
-              id="amount"
-              min="0"
+              id="income-amount"
               name="amount"
               onChange={handleInputChange}
               placeholder="0.00"
@@ -194,14 +193,14 @@ export function ManualExpenseForm({
           <div className="space-y-2">
             <label
               className="text-sm font-medium text-[color:var(--foreground)]"
-              htmlFor="date"
+              htmlFor="income-date"
             >
-              Data da compra
+              Data da entrada
             </label>
             <input
               aria-invalid={Boolean(errors.date)}
               className="w-full rounded-[22px] border border-[rgba(31,42,34,0.14)] bg-white/88 px-4 py-3 outline-none transition focus:border-[color:var(--accent-forest)] focus:ring-4 focus:ring-[rgba(31,138,112,0.12)]"
-              id="date"
+              id="income-date"
               name="date"
               onChange={handleInputChange}
               type="date"
@@ -218,27 +217,27 @@ export function ManualExpenseForm({
         <div className="space-y-2">
           <label
             className="text-sm font-medium text-[color:var(--foreground)]"
-            htmlFor="category"
+            htmlFor="income-source"
           >
-            Categoria
+            Origem
           </label>
           <select
-            aria-invalid={Boolean(errors.category)}
+            aria-invalid={Boolean(errors.source)}
             className="w-full rounded-[22px] border border-[rgba(31,42,34,0.14)] bg-white/88 px-4 py-3 outline-none transition focus:border-[color:var(--accent-forest)] focus:ring-4 focus:ring-[rgba(31,138,112,0.12)]"
-            id="category"
-            name="category"
+            id="income-source"
+            name="source"
             onChange={handleInputChange}
-            value={formState.category}
+            value={formState.source}
           >
-            {expenseCategories.map((category) => (
-              <option key={category} value={category}>
-                {category}
+            {incomeSources.map((source) => (
+              <option key={source} value={source}>
+                {source}
               </option>
             ))}
           </select>
-          {errors.category ? (
+          {errors.source ? (
             <p className="text-sm text-[color:var(--accent-clay)]">
-              {errors.category}
+              {errors.source}
             </p>
           ) : null}
         </div>
@@ -263,11 +262,11 @@ export function ManualExpenseForm({
           disabled={isSubmitting}
           type="submit"
         >
-          {isSubmitting ? "Salvando..." : "Salvar despesa"}
+          {isSubmitting ? "Salvando..." : "Salvar entrada"}
         </button>
       </form>
 
-      {/* TODO implement: adicionar mais testes para regras de negocio da saida manual. */}
+      {/* TODO implement: adicionar testes da feature de entradas e conectar esta UI ao Firestore. */}
     </section>
   );
 }

@@ -4,6 +4,21 @@ Este repositorio foi preparado para apoiar um trabalho pratico de Jenkins, TestO
 
 ## Aplicacao
 
+- `src/components/income-entry-form.tsx`
+  - concluir a experiencia de cadastro de entradas
+  - validar os campos e enviar os dados corretos para o hook
+- `src/services/income-entry-service.ts`
+  - persistir entradas no Firestore
+  - definir a colecao e o contrato dos documentos
+- `src/services/use-income-entries.ts`
+  - trocar o fallback demonstrativo pela soma real das entradas
+  - refletir erros e loading da feature no dashboard
+- `src/components/manual-expense-form.tsx`
+  - concluir as regras da saida manual
+  - garantir feedback e cobertura de testes da feature
+- `src/services/expense-service.ts`
+  - persistir as saidas manuais e as saidas vindas do OCR
+  - manter o formato esperado pelo dashboard
 - `src/components/receipt-upload-panel.tsx`
   - concluir a experiencia de upload da nota fiscal
   - exibir os dados extraidos antes da gravacao final
@@ -14,18 +29,22 @@ Este repositorio foi preparado para apoiar um trabalho pratico de Jenkins, TestO
   - integrar um provedor ou estrategia de OCR
   - extrair `establishmentName` e `amount`
   - devolver um contrato JSON consistente para o cliente
-- `src/components/camera-scan-panel.tsx`
-  - capturar imagem em tempo real
-  - reaproveitar o fluxo de extracao iniciado no upload
 
 ## Qualidade e Testes
 
+- `src/__tests__/income-entry-form.test.tsx`
+  - remover o `skip`
+  - validar o comportamento final da feature de entradas
+- `src/__tests__/manual-expense-form.test.tsx`
+  - remover o `skip`
+  - validar a saida manual e o bloqueio de valores invalidos
+- `src/__tests__/receipt-upload-panel.test.tsx`
+  - remover o `skip`
+  - verificar o fluxo completo de leitura por arquivo
 - `src/__tests__/receipt-upload.test.ts`
   - remover o `skip`
   - fazer o teste falhar no momento planejado do trabalho
   - corrigir a implementacao ate o teste passar
-- `src/__tests__/camera-scan-panel.test.tsx`
-  - ativar o teste quando a captura ao vivo estiver pronta
 
 ## Infraestrutura
 
@@ -40,6 +59,6 @@ Este repositorio foi preparado para apoiar um trabalho pratico de Jenkins, TestO
 
 1. Rodar a base localmente e entender os componentes existentes.
 2. Configurar o Jenkins para clonar, instalar, testar e buildar o projeto.
-3. Ativar o teste de OCR por upload sem concluir a implementacao.
+3. Escolher qual dos testes `skip` sera ativado primeiro para provocar a falha planejada.
 4. Registrar a falha do pipeline no Jenkins.
-5. Implementar a extracao e repetir o push ate a pipeline liberar o deploy.
+5. Implementar entradas, saidas manuais e leitura por arquivo ate a pipeline liberar o deploy.

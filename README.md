@@ -1,33 +1,40 @@
 # Fluxo Financeiro
 
-Aplicacao base para um trabalho pratico de Qualidade de Software, TestOps e deploy controlado por Jenkins. O template usa Next.js App Router, React 19, TailwindCSS 4 e Firebase Firestore, mas nao entrega a solucao final: ele deixa os pontos criticos sinalizados com `TODO implement` para que a turma complete a atividade.
+Aplicacao base para um trabalho pratico de Qualidade de Software, TestOps e deploy controlado por Jenkins. O template usa Next.js App Router, React 19, TailwindCSS 4 e Firebase Firestore, mas nao entrega as features avaliadas: ele deixa as tres entregas principais como scaffold com `TODO implement` para que a turma implemente, teste e publique via Jenkins.
 
 ## O que ja vem pronto
 
 - Dashboard responsivo com resumo financeiro e lista de despesas.
-- Formulario manual funcional para registrar despesas no Firestore.
-- Nova trilha de upload de nota fiscal por foto ou PDF antes da etapa de camera.
-- Etapa futura de camera/OCR reservada para evolucao da atividade.
+- Estrutura visual das tres features do trabalho.
+- Hook e servicos base para despesas, entradas e leitura de nota fiscal.
+- Route Handler de OCR por arquivo criado como ponto de extensao.
 - Scaffold de `Jenkinsfile` com os estagios obrigatorios do trabalho.
-- Testes unitarios iniciais com Jest e React Testing Library.
+- Testes guia com cenarios `test.skip` para a turma ativar no momento planejado.
 
 ## O que os alunos precisam concluir
 
+- Implementar o cadastro de entradas.
+- Implementar o cadastro de saidas manuais.
 - Finalizar a extracao de `nome do estabelecimento` e `valor` a partir da nota fiscal enviada.
 - Persistir a saida extraida como despesa no Firestore.
-- Reaproveitar a mesma trilha de extracao no fluxo de camera.
 - Completar a integracao Jenkins -> GitHub -> Vercel sem expor secrets.
 - Ativar e fazer passar os testes marcados com `test.skip` no fluxo planejado do trabalho.
 
 ## Arquivos com `TODO implement`
 
 - `Jenkinsfile`
+- `src/components/income-entry-form.tsx`
+- `src/services/income-entry-service.ts`
+- `src/services/use-income-entries.ts`
+- `src/components/manual-expense-form.tsx`
+- `src/services/expense-service.ts`
 - `src/components/receipt-upload-panel.tsx`
 - `src/services/receipt-upload.ts`
 - `src/app/api/receipt-extraction/route.ts`
-- `src/components/camera-scan-panel.tsx`
+- `src/__tests__/income-entry-form.test.tsx`
+- `src/__tests__/manual-expense-form.test.tsx`
+- `src/__tests__/receipt-upload-panel.test.tsx`
 - `src/__tests__/receipt-upload.test.ts`
-- `src/__tests__/camera-scan-panel.test.tsx`
 - `docs/TODO_IMPLEMENTATION_MAP.md`
 
 ## Estrutura
@@ -85,9 +92,11 @@ O projeto espera as seguintes variaveis de ambiente publicas:
 
 As despesas sao gravadas na colecao `expenses`.
 
+As entradas ainda nao estao persistidas no template. A colecao e a estrategia de sincronizacao devem ser implementadas pela turma.
+
 ## OCR e Upload de Nota
 
-O fluxo novo de upload aceita PDF e imagens e leva o arquivo ate a rota `src/app/api/receipt-extraction/route.ts`. A base atual valida o arquivo, exibe feedback na interface e deixa a extracao real como atividade dos alunos.
+O fluxo de upload aceita PDF e imagens e leva o arquivo ate a rota `src/app/api/receipt-extraction/route.ts`. A base atual prepara a interface, o servico cliente e a rota, mas deixa a extracao real e o salvamento da despesa como atividade dos alunos.
 
 ## Jenkins e Vercel
 
@@ -97,8 +106,7 @@ O fluxo novo de upload aceita PDF e imagens e leva o arquivo ate a rota `src/app
 
 ## Testes incluidos
 
-- Validacao do formulario manual quando os campos obrigatorios estao vazios.
-- Envio do formulario manual com payload normalizado e limpeza dos campos.
-- Validacao do fluxo de upload de nota fiscal.
-- Esqueleto `test.skip` para a extracao OCR por upload.
-- Esqueleto `test.skip` para a captura pela camera.
+- Smoke test do scaffold de entradas.
+- Smoke test do scaffold de saida manual.
+- Smoke test do scaffold de leitura por arquivo.
+- Esqueletos `test.skip` para entradas, saida manual e OCR por upload.

@@ -1,6 +1,6 @@
 "use client";
 
-import { CameraScanPanel } from "@/components/camera-scan-panel";
+import { IncomeEntryForm } from "@/components/income-entry-form";
 import { ManualExpenseForm } from "@/components/manual-expense-form";
 import { OverviewChart } from "@/components/overview-chart";
 import { RecentExpensesList } from "@/components/recent-expenses-list";
@@ -8,9 +8,17 @@ import { ReceiptUploadPanel } from "@/components/receipt-upload-panel";
 import { SummaryCard } from "@/components/summary-card";
 import { demoMonthlyIncome } from "@/services/expense-types";
 import { formatCurrency } from "@/services/formatters";
+import { useIncomeEntries } from "@/services/use-income-entries";
 import { useExpenses } from "@/services/use-expenses";
 
 export function ExpenseDashboardApp() {
+  const {
+    addIncomeEntry,
+    incomeEntries,
+    isSubmitting: isSubmittingIncomeEntry,
+    loading: loadingIncomeEntries,
+    totalIncome,
+  } = useIncomeEntries();
   const {
     addExpense,
     deleteExpense,
@@ -26,10 +34,11 @@ export function ExpenseDashboardApp() {
     (currentTotal, expense) => currentTotal + expense.amount,
     0,
   );
-  const remainingBalance = demoMonthlyIncome - totalExpenses;
+  const remainingBalance = totalIncome - totalExpenses;
   const latestExpenses = expenses.slice(0, 5);
+  const totalTransactions = expenses.length + incomeEntries.length;
   const progressPercentage = Math.min(
-    Math.round((totalExpenses / demoMonthlyIncome) * 100),
+    Math.round((totalExpenses / totalIncome) * 100),
     100,
   );
 
@@ -47,14 +56,14 @@ export function ExpenseDashboardApp() {
               <span className="section-eyebrow">Fluxo Financeiro</span>
               <div className="space-y-3">
                 <h1 className="max-w-2xl text-4xl leading-tight font-semibold text-[color:var(--foreground)] sm:text-5xl">
-                  Controle as despesas da equipe com uma base pronta para
+                  Trabalho base com tres desafios prontos para
                   Firebase, GitHub, Jenkins e Vercel.
                 </h1>
                 <p className="max-w-2xl text-sm leading-7 text-[color:var(--muted)] sm:text-base">
-                  O dashboard reune o resumo financeiro, o cadastro manual, a
-                  nova trilha de upload de notas fiscais e o espaco reservado
-                  para evolucao futura com camera. A persistencia fica
-                  preparada para o Firestore em tempo real.
+                  O dashboard organiza as tres features do trabalho: entradas,
+                  saidas manuais e saidas por leitura de nota fiscal em PDF ou
+                  imagem. O projeto base foi preparado como scaffold e deixa as
+                  entregas finais para os alunos concluirem.
                 </p>
               </div>
             </div>
@@ -82,9 +91,9 @@ export function ExpenseDashboardApp() {
                   </p>
                 </div>
                 <p className="max-w-[14rem] text-right text-sm leading-6 text-[color:var(--muted)]">
-                  Entradas demonstrativas fixadas em{" "}
-                  {formatCurrency(demoMonthlyIncome)} para simplificar o
-                  comparativo visual do dashboard.
+                  Enquanto a feature de entradas nao for concluida, o painel
+                  usa o fallback de {formatCurrency(demoMonthlyIncome)} para o
+                  comparativo visual.
                 </p>
               </div>
             </div>
@@ -115,22 +124,22 @@ export function ExpenseDashboardApp() {
 
           <div className="mt-6 grid gap-4 md:grid-cols-3">
             <SummaryCard
-              description="Valor usado como base para comparar gastos e entradas."
+              description="Fica em fallback ate a turma concluir o cadastro real de entradas."
               tone="forest"
               title="Entradas"
-              value={formatCurrency(demoMonthlyIncome)}
+              value={formatCurrency(totalIncome)}
             />
             <SummaryCard
-              description="Soma de todas as despesas sincronizadas no Firestore."
+              description="Soma das saidas cadastradas manualmente ou via leitura de nota."
               tone="amber"
               title="Despesas"
               value={formatCurrency(totalExpenses)}
             />
             <SummaryCard
-              description="Quantidade de itens cadastrados e prontos para exclusao."
+              description="Total combinado de registros de entradas e saidas no dashboard."
               tone="clay"
               title="Lancamentos"
-              value={`${expenses.length} registro${expenses.length === 1 ? "" : "s"}`}
+              value={`${totalTransactions} registro${totalTransactions === 1 ? "" : "s"}`}
             />
           </div>
         </section>
@@ -139,8 +148,8 @@ export function ExpenseDashboardApp() {
           <section className="space-y-6">
             <OverviewChart
               expenses={totalExpenses}
-              income={demoMonthlyIncome}
-              loading={loading}
+              income={totalIncome}
+              loading={loading || loadingIncomeEntries}
             />
 
             <RecentExpensesList
@@ -152,6 +161,10 @@ export function ExpenseDashboardApp() {
           </section>
 
           <aside className="space-y-6">
+            <IncomeEntryForm
+              isSubmitting={isSubmittingIncomeEntry}
+              onSubmitIncomeEntry={addIncomeEntry}
+            />
             <ManualExpenseForm
               isSubmitting={isSubmitting}
               onSubmitExpense={addExpense}
@@ -160,7 +173,6 @@ export function ExpenseDashboardApp() {
               isSubmitting={isSubmitting}
               onSubmitExpense={addExpense}
             />
-            <CameraScanPanel />
           </aside>
         </div>
       </div>

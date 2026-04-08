@@ -3,25 +3,43 @@ import userEvent from "@testing-library/user-event";
 import { ManualExpenseForm } from "@/components/manual-expense-form";
 
 describe("ManualExpenseForm", () => {
-  test("mostra validacao quando os campos obrigatorios estao vazios", async () => {
-    const user = userEvent.setup();
+  test("renderiza o formulario manual como scaffold da atividade", () => {
     const onSubmitExpense = jest.fn<Promise<void>, []>().mockResolvedValue();
 
     render(<ManualExpenseForm onSubmitExpense={onSubmitExpense} />);
 
-    await user.click(screen.getByRole("button", { name: /salvar despesa/i }));
-
     expect(
-      screen.getByText("Revise os campos destacados antes de salvar."),
+      screen.getByRole("heading", { name: /saida manual/i }),
     ).toBeInTheDocument();
-    expect(screen.getByText("Informe o titulo da despesa.")).toBeInTheDocument();
-    expect(screen.getByText("Digite um valor maior que zero.")).toBeInTheDocument();
-    expect(onSubmitExpense).not.toHaveBeenCalled();
+    expect(
+      screen.getByText(/TODO implement: esta feature deve ser concluida/i),
+    ).toBeInTheDocument();
   });
 
-  test("envia os dados normalizados e limpa o formulario apos o cadastro", async () => {
-    const user = userEvent.setup();
-    const onSubmitExpense = jest.fn().mockResolvedValue(undefined);
+  test.skip(
+    "TODO implement: bloqueia saidas manuais com valores invalidos",
+    async () => {
+      const user = userEvent.setup();
+      const onSubmitExpense = jest.fn().mockResolvedValue(undefined);
+
+      render(<ManualExpenseForm onSubmitExpense={onSubmitExpense} />);
+
+      await user.type(screen.getByLabelText(/titulo da despesa/i), "Mercado");
+      await user.type(screen.getByLabelText(/valor total/i), "-12");
+      await user.click(screen.getByRole("button", { name: /salvar despesa/i }));
+
+      expect(
+        screen.getByText("Digite um valor maior que zero."),
+      ).toBeInTheDocument();
+      expect(onSubmitExpense).not.toHaveBeenCalled();
+    },
+  );
+
+  test.skip(
+    "TODO implement: envia a saida manual normalizada quando a feature estiver concluida",
+    async () => {
+      const user = userEvent.setup();
+      const onSubmitExpense = jest.fn().mockResolvedValue(undefined);
 
     render(<ManualExpenseForm onSubmitExpense={onSubmitExpense} />);
 
@@ -47,5 +65,6 @@ describe("ManualExpenseForm", () => {
     expect(screen.getByLabelText(/titulo da despesa/i)).toHaveValue("");
     expect(screen.getByLabelText(/valor total/i)).toHaveValue(null);
     expect(screen.getByLabelText(/categoria/i)).toHaveValue("Alimentacao");
-  });
+    },
+  );
 });
