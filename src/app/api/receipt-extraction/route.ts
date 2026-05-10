@@ -4,7 +4,17 @@ import {
 } from "@/services/receipt-upload";
 
 export async function POST(request: Request) {
-  const formData = await request.formData();
+  let formData: FormData;
+
+  try {
+    formData = await request.formData();
+  } catch {
+    return Response.json(
+      { error: "Envie um arquivo no campo `receipt` para iniciar a extracao." },
+      { status: 400 },
+    );
+  }
+
   const receipt = formData.get("receipt");
 
   if (!(receipt instanceof File)) {

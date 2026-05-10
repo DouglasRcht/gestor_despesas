@@ -31,6 +31,17 @@ pipeline {
       }
     }
 
+    stage("E2E Tests (Cypress + Cucumber)") {
+      steps {
+        sh "npm run test:e2e:ci"
+      }
+      post {
+        always {
+          archiveArtifacts artifacts: "cypress/screenshots/**/*.png,cypress/videos/**/*.mp4", allowEmptyArchive: true
+        }
+      }
+    }
+
     stage("Deploy Vercel") {
       when {
         branch "main"
