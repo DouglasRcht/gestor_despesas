@@ -83,7 +83,7 @@ export async function extractExpenseFromReceipt(
 
   if (!response.ok) {
     throw new Error(
-      payload.error ?? "Nao foi possivel processar a nota fiscal enviada.",
+      payload.error ?? "Não foi possível processar a nota fiscal enviada.",
     );
   }
 
@@ -91,6 +91,6 @@ export async function extractExpenseFromReceipt(
   // TODO implement: confirmar se establishmentName e amount vieram preenchidos.
   // TODO implement: permitir ajustes manuais antes de persistir a despesa.
   throw new Error(
-    "TODO implement: conclua o mapeamento da nota fiscal para uma despesa valida.",
+    "TODO implement: conclua o mapeamento da nota fiscal para uma despesa válida.",
   );
 }

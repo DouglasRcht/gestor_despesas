@@ -50,7 +50,7 @@ export function useExpenses() {
       const message =
         submissionError instanceof Error
           ? submissionError.message
-          : "Nao foi possivel salvar a despesa.";
+          : "Não foi possível salvar a despesa.";
 
       setError(message);
       throw submissionError;
@@ -69,7 +69,7 @@ export function useExpenses() {
       const message =
         deletionError instanceof Error
           ? deletionError.message
-          : "Nao foi possivel excluir a despesa.";
+          : "Não foi possível excluir a despesa.";
 
       setError(message);
       throw deletionError;

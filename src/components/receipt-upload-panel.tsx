@@ -69,7 +69,7 @@ export function ReceiptUploadPanel({
 
     setIsAnalyzing(true);
     setFeedback({
-      message: "Arquivo enviado para a trilha de extracao da nota fiscal.",
+      message: "Arquivo enviado para a trilha de extração da nota fiscal.",
       tone: "neutral",
     });
 
@@ -101,13 +101,13 @@ export function ReceiptUploadPanel({
         <div>
           <p className="section-eyebrow">Feature 03</p>
           <h2 className="mt-3 text-2xl font-semibold text-[color:var(--foreground)]">
-            Saida por leitura de PDF ou imagem
+            Saída por leitura de PDF ou imagem
           </h2>
         </div>
         <p className="text-sm leading-7 text-[color:var(--muted)]">
-          O fluxo de upload, a rota de extracao e o servico cliente ja existem,
+          O fluxo de upload, a rota de extração e o serviço cliente já existem,
           mas a leitura real da nota fiscal e o salvamento da despesa ainda
-          estao marcados com `TODO implement`.
+          estão marcados com `TODO implement`.
         </p>
       </div>
 
@@ -117,7 +117,7 @@ export function ReceiptUploadPanel({
           <p>1. Selecionar uma nota fiscal em imagem ou PDF.</p>
           <p>2. Enviar o arquivo para `/api/receipt-extraction`.</p>
           <p>3. Extrair nome do local e valor da compra.</p>
-          <p>4. Salvar o resultado como saida (despesa) no Firestore.</p>
+          <p>4. Salvar o resultado como saída (despesa) no Firestore.</p>
         </div>
 
         <div className="space-y-2">
@@ -139,7 +139,7 @@ export function ReceiptUploadPanel({
           </p>
           {selectedFile ? (
             <p className="text-sm leading-6 text-[color:var(--foreground)]">
-              Arquivo pronto para analise: <strong>{selectedFile.name}</strong>
+              Arquivo pronto para análise: <strong>{selectedFile.name}</strong>
             </p>
           ) : null}
         </div>
@@ -181,8 +181,8 @@ export function ReceiptUploadPanel({
         </div>
       </div>
 
-      {/* TODO implement: exibir os dados extraidos em campos editaveis antes do salvamento final. */}
-      {/* TODO implement: adicionar preview da nota fiscal para apoiar a revisao manual. */}
+      {/* TODO implement: exibir os dados extraídos em campos editáveis antes do salvamento final. */}
+      {/* TODO implement: adicionar preview da nota fiscal para apoiar a revisão manual. */}
     </section>
   );
 }

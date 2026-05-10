@@ -1,24 +1,24 @@
-# TODO implement: Desafio 1 — Persistencia de entradas no Firestore
+# TODO implement: Desafio 1 — Persistência de entradas no Firestore
 #
-# Pre-requisito: concluir createIncomeEntry() em src/services/income-entry-service.ts
-# e subscribeToIncomeEntries() para sincronizacao em tempo real.
+# Pré-requisito: concluir createIncomeEntry() em src/services/income-entry-service.ts
+# e subscribeToIncomeEntries() para sincronização em tempo real.
 #
 # O que testar:
 #   - Entrada salva reflete no card "Entradas" sem recarregar
-#   - Saldo estimado aumenta apos salvar uma entrada
-#   - Formulario e limpo e mensagem de confirmacao aparece
-#   - Entradas persistem apos recarregar a pagina (Firestore em tempo real)
+#   - Saldo estimado aumenta após salvar uma entrada
+#   - Formulário é limpo e mensagem de confirmação aparece
+#   - Entradas persistem após recarregar a página (Firestore em tempo real)
 #   - Valor zero ou negativo continua bloqueado com Firebase ativo
 
-Feature: Criacao de entrada financeira no Firestore
+Feature: Criação de entrada financeira no Firestore
 
   Background:
-    # TODO implement: iniciar o app com variaveis Firebase validas no ambiente de teste
+    # TODO implement: iniciar o app com variáveis Firebase válidas no ambiente de teste
     Given que acesso a pagina inicial
 
   @todo
   Scenario: Salva uma entrada e atualiza o card de entradas
-    # TODO implement: preencher descricao com "Salario de abril"
+    # TODO implement: preencher descrição com "Salário de abril"
     # TODO implement: preencher valor com "5000"
     # TODO implement: selecionar origem "Salario"
     # TODO implement: clicar em "Salvar entrada"
@@ -29,16 +29,16 @@ Feature: Criacao de entrada financeira no Firestore
 
   @todo
   Scenario: Exibe confirmacao e reseta o formulario apos salvar
-    # TODO implement: submeter a entrada com dados validos
+    # TODO implement: submeter a entrada com dados válidos
     # TODO implement: verificar mensagem "Entrada cadastrada com sucesso."
-    # TODO implement: verificar que os campos descricao e valor estao limpos
+    # TODO implement: verificar que os campos descrição e valor estão limpos
     Given pendente de implementacao
     Then pendente de implementacao
 
   @todo
   Scenario: Entradas persistidas aparecem apos recarregar a pagina
-    # TODO implement: salvar uma entrada via formulario
-    # TODO implement: chamar cy.reload() para recarregar a pagina
+    # TODO implement: salvar uma entrada via formulário
+    # TODO implement: chamar cy.reload() para recarregar a página
     # TODO implement: verificar que o card "Entradas" ainda reflete o valor salvo
     Given pendente de implementacao
     Then pendente de implementacao

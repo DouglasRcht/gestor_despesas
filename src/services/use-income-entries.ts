@@ -44,7 +44,7 @@ export function useIncomeEntries() {
       const message =
         submissionError instanceof Error
           ? submissionError.message
-          : "Nao foi possivel salvar a entrada.";
+          : "Não foi possível salvar a entrada.";
 
       setError(message);
       throw submissionError;

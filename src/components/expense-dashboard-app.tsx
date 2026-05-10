@@ -56,21 +56,21 @@ export function ExpenseDashboardApp() {
               <span className="section-eyebrow">Fluxo Financeiro</span>
               <div className="space-y-3">
                 <h1 className="max-w-2xl text-4xl leading-tight font-semibold text-[color:var(--foreground)] sm:text-5xl">
-                  Trabalho base com tres desafios prontos para
+                  Trabalho base com três desafios prontos para
                   Firebase, GitHub, Jenkins e Vercel.
                 </h1>
                 <p className="max-w-2xl text-sm leading-7 text-[color:var(--muted)] sm:text-base">
-                  O dashboard organiza as tres features do trabalho: entradas,
-                  saidas manuais e saidas por leitura de nota fiscal em PDF ou
+                  O dashboard organiza as três features do trabalho: entradas,
+                  saídas manuais e saídas por leitura de nota fiscal em PDF ou
                   imagem. O projeto base foi preparado como scaffold e deixa as
-                  entregas finais para os alunos concluirem.
+                  entregas finais para os alunos concluírem.
                 </p>
               </div>
             </div>
 
             <div className="rounded-[30px] border border-white/70 bg-white/72 p-5">
               <div className="flex items-center justify-between text-sm text-[color:var(--muted)]">
-                <span>Uso do orcamento de exemplo</span>
+                <span>Uso do orçamento de exemplo</span>
                 <span>{progressPercentage}%</span>
               </div>
               <div className="mt-4 h-3 overflow-hidden rounded-full bg-[rgba(31,42,34,0.08)]">
@@ -91,7 +91,7 @@ export function ExpenseDashboardApp() {
                   </p>
                 </div>
                 <p className="max-w-[14rem] text-right text-sm leading-6 text-[color:var(--muted)]">
-                  Enquanto a feature de entradas nao for concluida, o painel
+                  Enquanto a feature de entradas não for concluída, o painel
                   usa o fallback de {formatCurrency(demoMonthlyIncome)} para o
                   comparativo visual.
                 </p>
@@ -102,12 +102,12 @@ export function ExpenseDashboardApp() {
           {!isConfigured ? (
             <div className="mt-6 rounded-[28px] border border-[rgba(217,123,44,0.28)] bg-[rgba(255,255,255,0.86)] p-5 text-sm leading-7 text-[color:var(--foreground)]">
               <p className="font-medium">
-                Configure as variaveis `NEXT_PUBLIC_FIREBASE_*` para ativar o
+                Configure as variáveis `NEXT_PUBLIC_FIREBASE_*` para ativar o
                 Firestore.
               </p>
               <p className="mt-2 text-[color:var(--muted)]">
-                A estrutura da aplicacao, do hook e das operacoes de CRUD ja
-                esta pronta. Falta apenas conectar as credenciais do projeto no
+                A estrutura da aplicação, do hook e das operações de CRUD já
+                está pronta. Falta apenas conectar as credenciais do projeto no
                 ambiente local ou na Vercel.
               </p>
             </div>
@@ -124,21 +124,21 @@ export function ExpenseDashboardApp() {
 
           <div className="mt-6 grid gap-4 md:grid-cols-3">
             <SummaryCard
-              description="Fica em fallback ate a turma concluir o cadastro real de entradas."
+              description="Fica em fallback até a turma concluir o cadastro real de entradas."
               tone="forest"
               title="Entradas"
               value={formatCurrency(totalIncome)}
             />
             <SummaryCard
-              description="Soma das saidas cadastradas manualmente ou via leitura de nota."
+              description="Soma das saídas cadastradas manualmente ou via leitura de nota."
               tone="amber"
               title="Despesas"
               value={formatCurrency(totalExpenses)}
             />
             <SummaryCard
-              description="Total combinado de registros de entradas e saidas no dashboard."
+              description="Total combinado de registros de entradas e saídas no dashboard."
               tone="clay"
-              title="Lancamentos"
+              title="Lançamentos"
               value={`${totalTransactions} registro${totalTransactions === 1 ? "" : "s"}`}
             />
           </div>

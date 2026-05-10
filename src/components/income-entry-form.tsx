@@ -40,7 +40,7 @@ function validateForm(state: FormState): FormErrors {
   const parsedAmount = Number(state.amount);
 
   if (!state.title.trim()) {
-    nextErrors.title = "Informe a descricao da entrada.";
+    nextErrors.title = "Informe a descrição da entrada.";
   }
 
   if (!state.amount || Number.isNaN(parsedAmount) || parsedAmount <= 0) {
@@ -66,7 +66,7 @@ export function IncomeEntryForm({
   const [errors, setErrors] = useState<FormErrors>({});
   const [feedback, setFeedback] = useState<FormFeedback | null>({
     message:
-      "TODO implement: esta feature deve ser concluida pelos alunos com persistencia, testes e deploy controlado.",
+      "TODO implement: esta feature deve ser concluída pelos alunos com persistência, testes e deploy controlado.",
     tone: "neutral",
   });
 
@@ -134,8 +134,8 @@ export function IncomeEntryForm({
           </h2>
         </div>
         <p className="text-sm leading-7 text-[color:var(--muted)]">
-          A interface e a estrutura do hook ja estao preparadas, mas a gravacao
-          das entradas ainda esta marcada com `TODO implement` para a turma.
+          A interface e a estrutura do hook já estão preparadas, mas a gravação
+          das entradas ainda está marcada com `TODO implement` para a turma.
         </p>
       </div>
 
@@ -145,7 +145,7 @@ export function IncomeEntryForm({
             className="text-sm font-medium text-[color:var(--foreground)]"
             htmlFor="income-title"
           >
-            Descricao da entrada
+            Descrição da entrada
           </label>
           <input
             aria-invalid={Boolean(errors.title)}

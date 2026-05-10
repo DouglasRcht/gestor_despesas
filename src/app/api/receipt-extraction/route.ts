@@ -10,7 +10,7 @@ export async function POST(request: Request) {
     formData = await request.formData();
   } catch {
     return Response.json(
-      { error: "Envie um arquivo no campo `receipt` para iniciar a extracao." },
+      { error: "Envie um arquivo no campo `receipt` para iniciar a extração." },
       { status: 400 },
     );
   }
@@ -20,7 +20,7 @@ export async function POST(request: Request) {
   if (!(receipt instanceof File)) {
     return Response.json(
       {
-        error: "Envie um arquivo no campo `receipt` para iniciar a extracao.",
+        error: "Envie um arquivo no campo `receipt` para iniciar a extração.",
       },
       { status: 400 },
     );
@@ -37,15 +37,15 @@ export async function POST(request: Request) {
     );
   }
 
-  // TODO implement: ler o binario da nota fiscal enviada.
-  // TODO implement: integrar um provedor ou estrategia de OCR.
+  // TODO implement: ler o binário da nota fiscal enviada.
+  // TODO implement: integrar um provedor ou estratégia de OCR.
   // TODO implement: extrair establishmentName e amount.
   // TODO implement: normalizar o contrato de retorno para o cliente.
   return Response.json(
     {
       acceptedTypes: getSupportedReceiptTypesLabel(),
       error:
-        "TODO implement: conclua a extracao da nota fiscal nesta rota antes de salvar a despesa.",
+        "TODO implement: conclua a extração da nota fiscal nesta rota antes de salvar a despesa.",
       expectedFields: [
         "establishmentName",
         "amount",

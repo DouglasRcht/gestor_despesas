@@ -17,7 +17,7 @@ export class FirestoreConfigurationError extends Error {
       getMissingFirebaseEnvironmentVariables().join(", ");
 
     super(
-      `Firestore indisponivel. Configure as variaveis ${missingEnvironmentVariables} para habilitar a persistencia.`,
+      `Firestore indisponível. Configure as variáveis ${missingEnvironmentVariables} para habilitar a persistência.`,
     );
     this.name = "FirestoreConfigurationError";
   }
@@ -36,11 +36,11 @@ function getExpensesCollection() {
 export async function createExpense(expenseInput: ExpenseInput) {
   void expenseInput;
 
-  // TODO implement: validar regras de negocio para saidas manuais e saidas por OCR.
-  // TODO implement: persistir a despesa no Firestore mantendo createdAt para ordenacao.
+  // TODO implement: validar regras de negócio para saídas manuais e saídas por OCR.
+  // TODO implement: persistir a despesa no Firestore mantendo createdAt para ordenação.
   // TODO implement: retornar o documento criado para refletir no dashboard.
   throw new Error(
-    "TODO implement: conclua a feature de saidas antes de salvar no Firestore.",
+    "TODO implement: conclua a feature de saídas antes de salvar no Firestore.",
   );
 }
 

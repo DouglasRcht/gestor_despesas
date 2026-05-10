@@ -9,10 +9,10 @@ describe("ManualExpenseForm", () => {
     render(<ManualExpenseForm onSubmitExpense={onSubmitExpense} />);
 
     expect(
-      screen.getByRole("heading", { name: /saida manual/i }),
+      screen.getByRole("heading", { name: "Saída manual" }),
     ).toBeInTheDocument();
     expect(
-      screen.getByText(/TODO implement: esta feature deve ser concluida/i),
+      screen.getByText(/TODO implement: esta feature deve ser concluída/i),
     ).toBeInTheDocument();
   });
 
@@ -24,7 +24,7 @@ describe("ManualExpenseForm", () => {
 
       render(<ManualExpenseForm onSubmitExpense={onSubmitExpense} />);
 
-      await user.type(screen.getByLabelText(/titulo da despesa/i), "Mercado");
+      await user.type(screen.getByLabelText(/título da despesa/i), "Mercado");
       await user.type(screen.getByLabelText(/valor total/i), "-12");
       await user.click(screen.getByRole("button", { name: /salvar despesa/i }));
 
@@ -44,7 +44,7 @@ describe("ManualExpenseForm", () => {
     render(<ManualExpenseForm onSubmitExpense={onSubmitExpense} />);
 
     await user.type(
-      screen.getByLabelText(/titulo da despesa/i),
+      screen.getByLabelText(/título da despesa/i),
       "Mercado semanal",
     );
     await user.type(screen.getByLabelText(/valor total/i), "123.45");
@@ -62,7 +62,7 @@ describe("ManualExpenseForm", () => {
     expect(
       await screen.findByText("Despesa cadastrada com sucesso."),
     ).toBeInTheDocument();
-    expect(screen.getByLabelText(/titulo da despesa/i)).toHaveValue("");
+    expect(screen.getByLabelText(/título da despesa/i)).toHaveValue("");
     expect(screen.getByLabelText(/valor total/i)).toHaveValue(null);
     expect(screen.getByLabelText(/categoria/i)).toHaveValue("Alimentacao");
     },

@@ -29,7 +29,7 @@ Then("vejo o erro de validacao {string}", (message: string) => {
 });
 
 Then("vejo o alerta {string}", (message: string) => {
-  cy.get('[role="alert"]').should("contain.text", message);
+  cy.contains('[role="alert"]', message).should("be.visible");
 });
 
 When("clico no botao {string}", (text: string) => {

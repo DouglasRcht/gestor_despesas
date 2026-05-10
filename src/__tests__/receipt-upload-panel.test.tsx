@@ -9,11 +9,11 @@ describe("ReceiptUploadPanel", () => {
     render(<ReceiptUploadPanel onSubmitExpense={onSubmitExpense} />);
 
     expect(
-      screen.getByRole("heading", { name: /saida por leitura de pdf ou imagem/i }),
+      screen.getByRole("heading", { name: "Saída por leitura de PDF ou imagem" }),
     ).toBeInTheDocument();
   });
 
-  test("mostra o nome do arquivo selecionado para a analise", async () => {
+  test("mostra o nome do arquivo selecionado para a análise", async () => {
     const user = userEvent.setup();
     const onSubmitExpense = jest.fn().mockResolvedValue(undefined);
 
@@ -27,7 +27,7 @@ describe("ReceiptUploadPanel", () => {
     await user.upload(input, file);
 
     expect(
-      screen.getByText(/Arquivo pronto para analise:/i),
+      screen.getByText(/Arquivo pronto para análise:/i),
     ).toBeInTheDocument();
     expect(screen.getByText("nota-mercado.pdf")).toBeInTheDocument();
   });

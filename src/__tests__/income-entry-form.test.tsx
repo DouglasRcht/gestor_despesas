@@ -12,7 +12,7 @@ describe("IncomeEntryForm", () => {
       screen.getByRole("heading", { name: /cadastro de entradas/i }),
     ).toBeInTheDocument();
     expect(
-      screen.getByText(/TODO implement: esta feature deve ser concluida/i),
+      screen.getByText(/TODO implement: esta feature deve ser concluída/i),
     ).toBeInTheDocument();
   });
 
@@ -25,7 +25,7 @@ describe("IncomeEntryForm", () => {
       render(<IncomeEntryForm onSubmitIncomeEntry={onSubmitIncomeEntry} />);
 
       await user.type(
-        screen.getByLabelText(/descricao da entrada/i),
+        screen.getByLabelText(/descrição da entrada/i),
         "Pagamento do cliente",
       );
       await user.type(screen.getByLabelText(/valor da entrada/i), "500");

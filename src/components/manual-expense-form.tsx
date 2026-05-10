@@ -40,7 +40,7 @@ function validateForm(state: FormState): FormErrors {
   const parsedAmount = Number(state.amount);
 
   if (!state.title.trim()) {
-    nextErrors.title = "Informe o titulo da despesa.";
+    nextErrors.title = "Informe o título da despesa.";
   }
 
   if (!state.amount || Number.isNaN(parsedAmount) || parsedAmount <= 0) {
@@ -66,7 +66,7 @@ export function ManualExpenseForm({
   const [errors, setErrors] = useState<FormErrors>({});
   const [feedback, setFeedback] = useState<FormFeedback | null>({
     message:
-      "TODO implement: esta feature deve ser concluida pelos alunos com validacao, testes e persistencia.",
+      "TODO implement: esta feature deve ser concluída pelos alunos com validação, testes e persistência.",
     tone: "neutral",
   });
 
@@ -130,11 +130,11 @@ export function ManualExpenseForm({
         <div>
           <p className="section-eyebrow">Feature 02</p>
           <h2 className="mt-3 text-2xl font-semibold text-[color:var(--foreground)]">
-            Saida manual
+            Saída manual
           </h2>
         </div>
         <p className="text-sm leading-7 text-[color:var(--muted)]">
-          O formulario ja esta montado, mas o salvamento definitivo das saidas
+          O formulário já está montado, mas o salvamento definitivo das saídas
           ficou como desafio da turma dentro do `expense-service.ts`.
         </p>
       </div>
@@ -145,7 +145,7 @@ export function ManualExpenseForm({
             className="text-sm font-medium text-[color:var(--foreground)]"
             htmlFor="title"
           >
-            Titulo da despesa
+            Título da despesa
           </label>
           <input
             aria-invalid={Boolean(errors.title)}
@@ -267,7 +267,7 @@ export function ManualExpenseForm({
         </button>
       </form>
 
-      {/* TODO implement: adicionar mais testes para regras de negocio da saida manual. */}
+      {/* TODO implement: adicionar mais testes para regras de negócio da saída manual. */}
     </section>
   );
 }

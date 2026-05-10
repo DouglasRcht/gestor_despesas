@@ -42,8 +42,8 @@ export function RecentExpensesList({
 
       {!loading && expenses.length === 0 ? (
         <div className="mt-8 rounded-[28px] border border-dashed border-[rgba(31,42,34,0.14)] bg-white/70 p-6 text-sm leading-7 text-[color:var(--muted)]">
-          Nenhuma saida cadastrada ainda. Esta area comeca vazia de proposito
-          para que a turma implemente e teste as features de saida manual e de
+          Nenhuma saída cadastrada ainda. Esta área começa vazia de propósito
+          para que a turma implemente e teste as features de saída manual e de
           leitura por arquivo.
         </div>
       ) : null}
