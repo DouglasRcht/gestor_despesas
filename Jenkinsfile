@@ -37,7 +37,8 @@ pipeline {
       }
       post {
         always {
-          archiveArtifacts artifacts: "cypress/screenshots/**/*.png,cypress/videos/**/*.mp4", allowEmptyArchive: true
+          archiveArtifacts artifacts: "cypress/screenshots/**/*.png,cypress/videos/**/*.mp4",
+                           allowEmptyArchive: true
         }
       }
     }
@@ -47,19 +48,31 @@ pipeline {
         branch "main"
       }
       steps {
-        echo "# TODO implement: cadastrar VERCEL_TOKEN, VERCEL_ORG_ID e VERCEL_PROJECT_ID em Jenkins Credentials."
-        echo "# TODO implement: encapsular o deploy com withCredentials e definir a estrategia final da Vercel CLI."
-        echo "# TODO implement: garantir que o deploy so ocorra quando a pipeline inteira estiver verde."
+        // Pré-requisito: cadastre as três credenciais abaixo em
+        // Jenkins → Manage Jenkins → Credentials → (global) → Add Credentials
+        //   Tipo: Secret text
+        //   IDs: VERCEL_TOKEN, VERCEL_ORG_ID, VERCEL_PROJECT_ID
+        // Os valores vêm do painel da Vercel (Settings → Tokens / General).
+        withCredentials([
+          string(credentialsId: "VERCEL_TOKEN",      variable: "VERCEL_TOKEN"),
+          string(credentialsId: "VERCEL_ORG_ID",     variable: "VERCEL_ORG_ID"),
+          string(credentialsId: "VERCEL_PROJECT_ID", variable: "VERCEL_PROJECT_ID"),
+        ]) {
+          sh "npm install --global vercel@latest"
+          sh "vercel pull --yes --environment=production --token=$VERCEL_TOKEN"
+          sh "vercel build --prod --token=$VERCEL_TOKEN"
+          sh "vercel deploy --prebuilt --prod --token=$VERCEL_TOKEN"
+        }
       }
     }
   }
 
   post {
     success {
-      echo "# TODO implement: registrar a URL gerada pela Vercel e o commit publicado no relatorio tecnico."
+      echo "Pipeline concluída. Deploy publicado na Vercel."
     }
     failure {
-      echo "# TODO implement: coletar a evidencia da falha para a analise de causa raiz."
+      echo "Pipeline falhou. Deploy bloqueado. Colete os logs para o relatório."
     }
   }
 }

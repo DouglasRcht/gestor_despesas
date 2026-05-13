@@ -13,70 +13,87 @@ export function OverviewChart({
 }: OverviewChartProps) {
   const higherValue = Math.max(expenses, income, 1);
   const balance = income - expenses;
-  const chartItems = [
+
+  const bars = [
     {
-      accent:
-        "from-[rgba(31,138,112,0.95)] to-[rgba(84,188,159,0.92)] shadow-[0_14px_28px_rgba(31,138,112,0.22)]",
-      helper: "Entrada usada como referencia no painel inicial.",
+      key: "income",
       label: "Entradas previstas",
+      helper: "Entrada usada como referência no painel inicial.",
       value: income,
+      fill: "bg-[var(--accent-forest)]",
+      glow: "shadow-[0_2px_12px_rgba(31,138,112,0.35)]",
+      dot: "bg-[var(--accent-forest)]",
     },
     {
-      accent:
-        "from-[rgba(217,123,44,0.95)] to-[rgba(238,180,95,0.92)] shadow-[0_14px_28px_rgba(217,123,44,0.2)]",
-      helper: "Despesa total proveniente dos documentos salvos no Firestore.",
+      key: "expenses",
       label: "Gastos acumulados",
+      helper: "Despesas salvas no Firestore via saída manual ou upload.",
       value: expenses,
+      fill: "bg-[var(--accent-amber)]",
+      glow: "shadow-[0_2px_12px_rgba(217,123,44,0.35)]",
+      dot: "bg-[var(--accent-amber)]",
     },
   ];
 
   return (
-    <section className="glass-panel animate-enter rounded-[36px] border border-[color:var(--border)] px-5 py-6 sm:px-7 sm:py-7">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+    <section className="data-panel animate-enter-1">
+      {/* Header */}
+      <div className="data-panel-header flex items-start justify-between gap-4">
         <div>
-          <p className="section-eyebrow">Dashboard</p>
-          <h2 className="mt-3 text-2xl font-semibold text-[color:var(--foreground)]">
-            Total de gastos vs entradas
+          <p className="section-eyebrow">Visão geral</p>
+          <h2 className="mt-1.5 text-[1.1rem] font-semibold text-[var(--foreground)]">
+            Gastos vs. Entradas
           </h2>
-          <p className="mt-2 max-w-2xl text-sm leading-7 text-[color:var(--muted)]">
-            Um comparativo simples para apoiar as aulas sobre leitura de dados,
-            integracao com o Firestore, entradas e OCR por upload de arquivo.
-          </p>
         </div>
-
-        <div className="rounded-[24px] border border-white/80 bg-white/78 px-4 py-3 text-left sm:text-right">
-          <p className="text-xs uppercase tracking-[0.18em] text-[color:var(--muted)]">
+        <div className="flex-shrink-0 rounded-xl border border-[var(--border)] bg-white/60 px-4 py-2.5 text-right">
+          <p className="font-mono text-[8.5px] tracking-[0.2em] text-[var(--muted)] uppercase">
             Saldo projetado
           </p>
-          <p className="mt-2 text-2xl font-semibold text-[color:var(--foreground)]">
-            {formatCurrency(balance)}
+          <p className="mt-0.5 font-mono text-lg font-semibold tabular-nums text-[var(--foreground)]">
+            {loading ? (
+              <span className="opacity-40">—</span>
+            ) : (
+              formatCurrency(balance)
+            )}
           </p>
         </div>
       </div>
 
-      <div className="mt-8 space-y-5">
-        {chartItems.map((item) => {
-          const widthPercentage = Math.max(
-            Math.round((item.value / higherValue) * 100),
-            item.value === 0 ? 6 : 16,
+      {/* Bars */}
+      <div className="space-y-5 px-6 py-5">
+        {bars.map((bar) => {
+          const pct = Math.max(
+            Math.round((bar.value / higherValue) * 100),
+            bar.value === 0 ? 3 : 10,
           );
 
           return (
-            <div key={item.label} className="space-y-2">
-              <div className="flex items-center justify-between gap-4 text-sm text-[color:var(--muted)]">
-                <span>{item.label}</span>
-                <span className="font-medium text-[color:var(--foreground)]">
-                  {loading ? "Sincronizando..." : formatCurrency(item.value)}
+            <div key={bar.key}>
+              <div className="mb-2 flex items-center justify-between gap-3">
+                <div className="flex items-center gap-2">
+                  <span className={`h-2 w-2 flex-shrink-0 rounded-full ${bar.dot}`} />
+                  <span className="text-[0.8rem] text-[var(--muted)]">
+                    {bar.label}
+                  </span>
+                </div>
+                <span className="font-mono text-[0.8rem] font-medium tabular-nums text-[var(--foreground)]">
+                  {loading ? (
+                    <span className="opacity-40">···</span>
+                  ) : (
+                    formatCurrency(bar.value)
+                  )}
                 </span>
               </div>
-              <div className="h-4 overflow-hidden rounded-full border border-white/60 bg-[rgba(31,42,34,0.06)]">
+
+              <div className="h-2.5 overflow-hidden rounded-full bg-[rgba(31,42,34,0.07)]">
                 <div
-                  className={`animate-bar-rise h-full rounded-full bg-gradient-to-r ${item.accent}`}
-                  style={{ width: `${widthPercentage}%` }}
+                  className={`animate-bar-rise h-full rounded-full ${bar.fill} ${bar.glow}`}
+                  style={{ width: `${pct}%` }}
                 />
               </div>
-              <p className="text-xs leading-6 text-[color:var(--muted)]">
-                {item.helper}
+
+              <p className="mt-1.5 text-[10.5px] leading-[1.55] text-[var(--muted)]/70">
+                {bar.helper}
               </p>
             </div>
           );

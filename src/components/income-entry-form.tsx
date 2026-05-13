@@ -125,148 +125,147 @@ export function IncomeEntryForm({
   }
 
   return (
-    <section className="glass-panel animate-enter rounded-[36px] border border-[color:var(--border)] px-5 py-6 sm:px-7 sm:py-7">
-      <div className="flex flex-col gap-3">
+    <section className="data-panel animate-enter">
+      {/* Panel header */}
+      <div className="data-panel-header flex items-center gap-3">
+        <div className="h-5 w-[3px] rounded-full bg-[var(--accent-forest)]" />
         <div>
-          <p className="section-eyebrow">Feature 01</p>
-          <h2 className="mt-3 text-2xl font-semibold text-[color:var(--foreground)]">
+          <p className="section-eyebrow" style={{ color: "var(--accent-forest)" }}>
+            Feature 01
+          </p>
+          <h2 className="mt-0.5 text-[1rem] font-semibold text-[var(--foreground)]">
             Cadastro de entradas
           </h2>
         </div>
-        <p className="text-sm leading-7 text-[color:var(--muted)]">
-          A interface e a estrutura do hook já estão preparadas, mas a gravação
-          das entradas ainda está marcada com `TODO implement` para a turma.
-        </p>
       </div>
 
-      <form className="mt-8 space-y-5" onSubmit={handleSubmit}>
-        <div className="space-y-2">
-          <label
-            className="text-sm font-medium text-[color:var(--foreground)]"
-            htmlFor="income-title"
-          >
-            Descrição da entrada
-          </label>
-          <input
-            aria-invalid={Boolean(errors.title)}
-            className="w-full rounded-[22px] border border-[rgba(31,42,34,0.14)] bg-white/88 px-4 py-3 outline-none transition focus:border-[color:var(--accent-forest)] focus:ring-4 focus:ring-[rgba(31,138,112,0.12)]"
-            id="income-title"
-            name="title"
-            onChange={handleInputChange}
-            placeholder="Ex.: Pagamento do cliente"
-            type="text"
-            value={formState.title}
-          />
-          {errors.title ? (
-            <p className="text-sm text-[color:var(--accent-clay)]">
-              {errors.title}
-            </p>
-          ) : null}
-        </div>
+      <div className="px-5 pb-5 pt-4">
+        <p className="mb-4 text-[11.5px] leading-[1.65] text-[var(--muted)]">
+          A interface e a estrutura do hook já estão preparadas, mas a gravação
+          das entradas ainda está marcada com{" "}
+          <code className="rounded bg-[rgba(31,42,34,0.07)] px-1 text-[10.5px] text-[var(--foreground)]">
+            TODO implement
+          </code>{" "}
+          para a turma.
+        </p>
 
-        <div className="grid gap-5 sm:grid-cols-2">
-          <div className="space-y-2">
-            <label
-              className="text-sm font-medium text-[color:var(--foreground)]"
-              htmlFor="income-amount"
-            >
-              Valor da entrada (R$)
+        <form className="space-y-3.5" onSubmit={handleSubmit}>
+          <div>
+            <label className="field-label" htmlFor="income-title">
+              Descrição da entrada
             </label>
             <input
-              aria-invalid={Boolean(errors.amount)}
-              className="w-full rounded-[22px] border border-[rgba(31,42,34,0.14)] bg-white/88 px-4 py-3 outline-none transition focus:border-[color:var(--accent-forest)] focus:ring-4 focus:ring-[rgba(31,138,112,0.12)]"
-              id="income-amount"
-              name="amount"
+              aria-invalid={Boolean(errors.title)}
+              className="field-input"
+              id="income-title"
+              name="title"
               onChange={handleInputChange}
-              placeholder="0.00"
-              step="0.01"
-              type="number"
-              value={formState.amount}
+              placeholder="Ex.: Pagamento do cliente"
+              type="text"
+              value={formState.title}
             />
-            {errors.amount ? (
-              <p className="text-sm text-[color:var(--accent-clay)]">
-                {errors.amount}
+            {errors.title ? (
+              <p className="mt-1 text-[11px] text-[var(--accent-clay)]">
+                {errors.title}
               </p>
             ) : null}
           </div>
 
-          <div className="space-y-2">
-            <label
-              className="text-sm font-medium text-[color:var(--foreground)]"
-              htmlFor="income-date"
-            >
-              Data da entrada
+          <div className="grid gap-3 sm:grid-cols-2">
+            <div>
+              <label className="field-label" htmlFor="income-amount">
+                Valor (R$)
+              </label>
+              <input
+                aria-invalid={Boolean(errors.amount)}
+                className="field-input"
+                id="income-amount"
+                name="amount"
+                onChange={handleInputChange}
+                placeholder="0,00"
+                step="0.01"
+                type="number"
+                value={formState.amount}
+              />
+              {errors.amount ? (
+                <p className="mt-1 text-[11px] text-[var(--accent-clay)]">
+                  {errors.amount}
+                </p>
+              ) : null}
+            </div>
+
+            <div>
+              <label className="field-label" htmlFor="income-date">
+                Data
+              </label>
+              <input
+                aria-invalid={Boolean(errors.date)}
+                className="field-input"
+                id="income-date"
+                name="date"
+                onChange={handleInputChange}
+                type="date"
+                value={formState.date}
+              />
+              {errors.date ? (
+                <p className="mt-1 text-[11px] text-[var(--accent-clay)]">
+                  {errors.date}
+                </p>
+              ) : null}
+            </div>
+          </div>
+
+          <div>
+            <label className="field-label" htmlFor="income-source">
+              Origem
             </label>
-            <input
-              aria-invalid={Boolean(errors.date)}
-              className="w-full rounded-[22px] border border-[rgba(31,42,34,0.14)] bg-white/88 px-4 py-3 outline-none transition focus:border-[color:var(--accent-forest)] focus:ring-4 focus:ring-[rgba(31,138,112,0.12)]"
-              id="income-date"
-              name="date"
+            <select
+              aria-invalid={Boolean(errors.source)}
+              className="field-input"
+              id="income-source"
+              name="source"
               onChange={handleInputChange}
-              type="date"
-              value={formState.date}
-            />
-            {errors.date ? (
-              <p className="text-sm text-[color:var(--accent-clay)]">
-                {errors.date}
+              value={formState.source}
+            >
+              {incomeSources.map((source) => (
+                <option key={source} value={source}>
+                  {source}
+                </option>
+              ))}
+            </select>
+            {errors.source ? (
+              <p className="mt-1 text-[11px] text-[var(--accent-clay)]">
+                {errors.source}
               </p>
             ) : null}
           </div>
-        </div>
 
-        <div className="space-y-2">
-          <label
-            className="text-sm font-medium text-[color:var(--foreground)]"
-            htmlFor="income-source"
-          >
-            Origem
-          </label>
-          <select
-            aria-invalid={Boolean(errors.source)}
-            className="w-full rounded-[22px] border border-[rgba(31,42,34,0.14)] bg-white/88 px-4 py-3 outline-none transition focus:border-[color:var(--accent-forest)] focus:ring-4 focus:ring-[rgba(31,138,112,0.12)]"
-            id="income-source"
-            name="source"
-            onChange={handleInputChange}
-            value={formState.source}
-          >
-            {incomeSources.map((source) => (
-              <option key={source} value={source}>
-                {source}
-              </option>
-            ))}
-          </select>
-          {errors.source ? (
-            <p className="text-sm text-[color:var(--accent-clay)]">
-              {errors.source}
+          {feedback ? (
+            <p
+              className={`rounded-xl border px-3.5 py-2.5 text-[11.5px] leading-[1.6] ${
+                feedback.tone === "success"
+                  ? "border-[rgba(31,138,112,0.18)] bg-[rgba(240,252,248,0.9)] text-[var(--accent-forest)]"
+                  : feedback.tone === "error"
+                    ? "border-[rgba(201,92,84,0.18)] bg-[rgba(255,244,243,0.9)] text-[var(--accent-clay)]"
+                    : "border-[rgba(217,123,44,0.15)] bg-[rgba(255,247,238,0.85)] text-[var(--foreground)]"
+              }`}
+              role={feedback.tone === "error" ? "alert" : "status"}
+            >
+              {feedback.message}
             </p>
           ) : null}
-        </div>
 
-        {feedback ? (
-          <p
-            className={`rounded-[22px] border px-4 py-3 text-sm leading-6 ${
-              feedback.tone === "success"
-                ? "border-[rgba(31,138,112,0.18)] bg-[rgba(240,252,248,0.95)] text-[color:var(--accent-forest)]"
-                : feedback.tone === "error"
-                  ? "border-[rgba(201,92,84,0.18)] bg-[rgba(255,244,243,0.95)] text-[color:var(--accent-clay)]"
-                  : "border-[rgba(217,123,44,0.18)] bg-[rgba(255,247,238,0.95)] text-[color:var(--foreground)]"
-            }`}
-            role={feedback.tone === "error" ? "alert" : "status"}
+          <button
+            className="w-full rounded-xl bg-[var(--accent-forest)] px-4 py-2.5 text-[11.5px] font-semibold tracking-[0.1em] text-white uppercase transition hover:bg-[rgba(31,138,112,0.88)] hover:shadow-[0_4px_16px_rgba(31,138,112,0.3)] hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50"
+            disabled={isSubmitting}
+            type="submit"
           >
-            {feedback.message}
-          </p>
-        ) : null}
+            {isSubmitting ? "Salvando…" : "Salvar entrada"}
+          </button>
+        </form>
 
-        <button
-          className="w-full rounded-full bg-[color:var(--foreground)] px-5 py-3 text-sm font-semibold tracking-[0.08em] text-white uppercase transition hover:-translate-y-0.5 hover:bg-[rgba(31,42,34,0.92)] disabled:cursor-not-allowed disabled:opacity-60"
-          disabled={isSubmitting}
-          type="submit"
-        >
-          {isSubmitting ? "Salvando..." : "Salvar entrada"}
-        </button>
-      </form>
-
-      {/* TODO implement: adicionar testes da feature de entradas e conectar esta UI ao Firestore. */}
+        {/* TODO implement: adicionar testes da feature de entradas e conectar esta UI ao Firestore. */}
+      </div>
     </section>
   );
 }

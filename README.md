@@ -4,7 +4,23 @@ Aplicação base para um trabalho prático de Qualidade de Software, TestOps e d
 
 A lógica central da disciplina é simples: **se a feature não estiver provada por testes e pela pipeline, ela não deve chegar ao deploy.**
 
-O trabalho é dividido em três semanas com ferramentas de teste diferentes — Cypress, Playwright e testRigor — sempre com o Jenkins como gatekeeper do deploy na Vercel.
+O trabalho é dividido em três semanas com ferramentas de teste diferentes — Cypress, Playwright e TestRigor — sempre com o Jenkins como gatekeeper do deploy na Vercel.
+
+---
+
+## Instruções detalhadas
+
+Acesse o guia completo em `/instrucoes` dentro da aplicação. O módulo cobre:
+
+| Rota | Conteúdo |
+| --- | --- |
+| `/instrucoes/jenkins` | CI/CD, Jenkinsfile real do projeto, webhook GitHub |
+| `/instrucoes/deploy` | Vercel setup, Firebase env vars, credenciais Jenkins |
+| `/instrucoes/todo` | Features a implementar + guia completo do OCR de nota fiscal |
+| `/instrucoes/cypress` | Semana 1: ativar `@todo`, ver Jenkins falhar, implementar, pipeline verde |
+| `/instrucoes/playwright` | Semana 2: migrar para Playwright, trocar stage no Jenkinsfile |
+| `/instrucoes/testrigor` | Semana 3: testes em linguagem natural, tabela comparativa |
+| `/instrucoes/relatorio` | Checklist por semana, estrutura do relatório, critérios |
 
 ---
 
@@ -49,15 +65,24 @@ cypress/e2e/todo-create-income-entry.feature   — persistência Firestore (entr
 cypress/e2e/todo-ocr-extraction.feature        — OCR + salvamento
 ```
 
-**Evidências obrigatórias da Semana 1 para o relatório PDF:**
+**Os 6 cenários obrigatórios (devem passar nas 3 semanas):**
+
+1. Cadastro de entrada financeira — salva no Firestore e atualiza o card
+2. Cadastro de saída manual — salva no Firestore e aparece na lista
+3. Exclusão de despesa — remove da lista sem recarregar
+4. Confirmação e limpeza — mensagem de sucesso + formulário em branco
+5. Upload de nota fiscal — despesa criada automaticamente via OCR
+6. Upload de nota fiscal — mensagem de sucesso exibida
+
+**Evidências obrigatórias da Semana 1:**
 
 - Print do Jenkins com pipeline vermelha (teste ativado antes da implementação).
-- Log de erro completo do stage `Unit Tests` ou `E2E Tests` que bloqueou o deploy.
+- Log de erro completo do stage E2E Tests que bloqueou o deploy.
 - Screenshots gerados pelo Cypress em `cypress/screenshots/` durante a falha.
 - Print do Jenkins com pipeline verde após a correção.
 - Print do deploy publicado na Vercel acionado pela pipeline verde.
-- Commit que ativou o teste e commit que fez o teste passar (rastreabilidade).
-- Análise de causa raiz (RCA): por que o teste falhou e como isso provou o bloqueio correto.
+- Os dois commits: o que ativou os testes (falha) e o que fez passar.
+- Análise de causa raiz (RCA): por que o teste falhou e como o Jenkins protegeu a produção.
 
 **Comandos da Semana 1:**
 
@@ -71,35 +96,17 @@ npm run cypress:open          # Cypress interativo
 
 ---
 
-### Semana 2 — BDD com Playwright + Cucumber (Testes Orientados a Comportamento)
+### Semana 2 — BDD com Playwright + Cucumber
 
-**Objetivo:** substituir o Cypress pela dupla Playwright + Cucumber e adotar a abordagem BDD para a feature de OCR — escrevendo o comportamento esperado em Gherkin *antes* de programar a implementação.
+**Objetivo:** substituir o stage Cypress pelo Playwright no Jenkinsfile e reescrever os 6 cenários obrigatórios em TypeScript com `async/await`.
 
-**Por que Playwright + Cucumber nesta fase:**
-
-A feature de OCR possui regras de negócio claras e verificáveis (nome do estabelecimento, valor, categoria sugerida). O BDD serve como ponte entre o requisito do documento e a automação: a equipe escreve o *o que* antes do *como*, garantindo que todos entendam a regra de negócio antes de integrar o fluxo de leitura de nota fiscal.
-
-**O aprendizado muda de "como testar" para "o que estamos construindo".**
-
-**Exemplo de cenário Gherkin para a feature OCR:**
-
-```gherkin
-Feature: Extração de nota fiscal por OCR
-
-  Scenario: Upload de PDF válido extrai dados e salva despesa
-    Given que o usuário está no painel de upload de nota fiscal
-    When ele envia um PDF válido com nome do estabelecimento e valor
-    Then o sistema deve extrair o nome do estabelecimento
-    And o sistema deve extrair o valor da compra
-    And o resultado deve ser salvo como despesa no Firestore
-    And o dashboard deve exibir a nova despesa na lista de lançamentos recentes
-```
-
-**Como adaptar o pipeline Jenkins:**
-
-Remova o stage de Cypress do `Jenkinsfile` e substitua pelo stage abaixo:
+**O que muda no Jenkinsfile:**
 
 ```groovy
+// Remova:
+stage("E2E Tests (Cypress + Cucumber)") { ... }
+
+// Adicione:
 stage("E2E Tests (Playwright + Cucumber)") {
   steps {
     sh "npx playwright install --with-deps chromium"
@@ -113,115 +120,107 @@ stage("E2E Tests (Playwright + Cucumber)") {
 }
 ```
 
-O stage de Playwright **bloqueia o deploy** — a pipeline falha se qualquer cenário Gherkin falhar.
+O stage continua bloqueando o deploy — só muda a ferramenta.
 
 **O que muda em relação ao Cypress:**
 
-| Aspecto | Cypress | Playwright + Cucumber |
+| Aspecto | Cypress | Playwright |
 | --- | --- | --- |
-| Paradigma de teste | Orientado a componente/UI | Orientado a comportamento (BDD) |
-| Especificação | Steps em TypeScript direto | Gherkin legível por não-técnicos |
-| Navegadores | Electron/Chrome | Chromium, Firefox, WebKit (multi-browser) |
-| Paralelismo | Limitado no plano free | Nativo e configurável |
-| Relatório | Screenshot/vídeo | HTML report + trace viewer |
-| Velocidade | Moderada | Rápido (sem iframe overhead) |
-| Curva de aprendizado | Baixa | Média (requer entender BDD + Cucumber) |
+| Sintaxe | `cy.get().click()` | `await page.click()` |
+| Async | Fila interna, sem await | `async/await` explícito |
+| Browsers | Chromium/Electron | Chrome, Firefox, Safari |
+| Relatório | Plugins externos | HTML report embutido |
+| Debug | UI interativa própria | Trace Viewer (replay) |
 
-**Evidências obrigatórias da Semana 2 para o relatório PDF:**
+**Evidências obrigatórias da Semana 2:**
 
-- Cenários Gherkin escritos *antes* da implementação da rota de OCR.
-- Print do Jenkins com o stage Playwright falhando (feature não concluída).
+- Os 6 cenários Gherkin (arquivos `.feature`) reescritos para o Playwright.
+- Print do Jenkins com o stage Playwright falhando (antes de terminar).
 - HTML report do Playwright com o trace do cenário que falhou.
-- Print da pipeline verde após concluir a implementação do OCR.
-- Comparação objetiva entre a abordagem Cypress (Semana 1) e Playwright+Cucumber (Semana 2):
-  - O que ficou mais claro para a equipe?
-  - Qual ferramenta foi mais expressiva para o requisito de OCR?
+- Print da pipeline verde com Playwright após implementar.
+- Comparação objetiva: o que ficou mais claro? Qual foi mais expressivo?
 
 ---
 
-### Semana 3 — Laboratório de Tendências Low-Code (testRigor)
+### Semana 3 — Laboratório TestRigor (Low-Code)
 
-**Objetivo:** experimentar o paradigma de testes em linguagem natural com testRigor e desenvolver senso crítico sobre quando usar engenharia tradicional versus ferramentas de IA low-code.
+**Objetivo:** escrever os mesmos 6 cenários em linguagem natural e desenvolver senso crítico sobre quando usar cada ferramenta.
 
-**Importante:** o testRigor **não é integrado ao Jenkins como critério de bloqueio de deploy** nesta fase. Ele é usado como atividade comparativa independente — misturar paradigmas de engenharia no mesmo gate diluiria o foco técnico da pipeline.
+**Importante:** o TestRigor **não é integrado ao Jenkins** nesta semana — é uma atividade comparativa independente.
 
-**Como funciona:**
-
-O testRigor abstrai completamente o código de automação. A equipe escreve testes em linguagem natural:
+**Exemplo de teste em linguagem natural:**
 
 ```text
-Open "https://seu-projeto.vercel.app"
-Click "Salvar despesa"
-Check that page contains "Informe o título da despesa."
-Type "Mercado semanal" in "Título da despesa"
-Type "150" in "Valor total"
-Click "Salvar despesa"
-Check that page contains "Despesa cadastrada com sucesso."
+open "https://seu-projeto.vercel.app"
+click on "Saída Manual"
+enter "Mercado semanal" into "Título da despesa"
+enter "150" into "Valor (R$)"
+click on "Salvar despesa"
+check that page contains "Despesa cadastrada com sucesso."
 ```
 
-**Dinâmica da atividade:**
+**Comparação final (preencher no relatório):**
 
-1. Após implementar o dashboard responsivo e a persistência manual (Semanas 1 e 2), a equipe valida as interfaces usando testRigor.
-2. Escreve os mesmos cenários cobertos pelo Playwright, agora em linguagem natural.
-3. Mede e compara:
-   - Tempo para criar o teste (Playwright vs testRigor).
-   - Tempo de manutenção quando a UI muda.
-   - Legibilidade para membros não-técnicos da equipe.
-   - Cobertura e confiabilidade (flakiness).
+| Critério | Cypress | Playwright | TestRigor |
+| --- | --- | --- | --- |
+| Tempo para criar os 6 testes | — | — | — |
+| Integração com Jenkins | Nativa | Nativa | Via API (limitada) |
+| Manutenção quando UI muda | Frágil (seletores) | Frágil (seletores) | Resistente (IA) |
+| Custo | Open-source | Open-source | Freemium (SaaS) |
+| Controle técnico | Alto | Alto | Baixo |
 
-**O que muda em relação ao Playwright:**
+**Evidências obrigatórias da Semana 3:**
 
-| Aspecto | Playwright + Cucumber | testRigor |
-| --- | --- | --- |
-| Código necessário | TypeScript + Gherkin | Linguagem natural (zero código) |
-| Manutenção | Manual, por desenvolvedor | Automática pela IA do testRigor |
-| Integração CI/CD | Nativa (Jenkins, GitHub Actions) | Via API/webhook (mais limitada) |
-| Debugging | Trace viewer detalhado | Painel visual simplificado |
-| Custo | Open-source | Plataforma SaaS (freemium) |
-| Ideal para | Times técnicos com BDD | Validação rápida por QAs ou PMs |
-
-**Evidências obrigatórias da Semana 3 para o relatório PDF:**
-
-- Print dos testes escritos em linguagem natural no testRigor.
-- Print da execução dos testes no painel do testRigor.
-- Tabela comparativa preenchida: Cypress × Playwright × testRigor (tempo, clareza, manutenção, CI/CD).
+- Print dos 6 testes escritos em linguagem natural no TestRigor.
+- Print da execução (painel verde/vermelho).
+- Tabela comparativa preenchida: Cypress × Playwright × TestRigor.
 - Conclusão técnica: em qual cenário real de projeto cada ferramenta seria a escolha certa?
 
 ---
 
 ## Relatório PDF final — estrutura obrigatória
 
-O relatório deve cobrir as três semanas em sequência e responder a cada mudança de ferramenta:
-
 ```text
 1. Introdução
    - Contexto do projeto Fluxo Financeiro
-   - Diagrama do fluxo: código local → push → GitHub → webhook → Jenkins → Vercel
+   - Diagrama: código local → push → GitHub → webhook → Jenkins → Vercel
 
 2. Semana 1 — Cypress + Cucumber
    - Implementação das features 01, 02 e 03
    - Evidência do Jenkins bloqueando o deploy (print + log)
    - Screenshots do Cypress durante a falha
    - Pipeline verde após correção
-   - Análise de causa raiz (RCA) do teste que falhou
+   - Análise de causa raiz (RCA)
 
-3. Semana 2 — Playwright + Cucumber (BDD)
-   - Cenários Gherkin escritos antes da implementação do OCR
-   - Evidência do Jenkins bloqueando com Playwright
+3. Semana 2 — Playwright + Cucumber
+   - Cenários reescritos em TypeScript
+   - Jenkins bloqueando com Playwright
    - Pipeline verde com Playwright
-   - O que mudou: comparação direta com a abordagem Cypress
-   - Diagrama ou print do HTML report do Playwright
+   - Comparação direta com Cypress + HTML report
 
-4. Semana 3 — testRigor (Low-Code)
-   - Testes em linguagem natural escritos para o dashboard
-   - Print da execução no testRigor
-   - Tabela comparativa final: Cypress × Playwright × testRigor
+4. Semana 3 — TestRigor
+   - Testes em linguagem natural
+   - Print da execução no TestRigor
+   - Tabela comparativa final
    - Conclusão: qual ferramenta para qual cenário
 
 5. Conclusão geral
    - Lições aprendidas sobre TestOps e CI/CD
    - O que o grupo faria diferente em um projeto real
 ```
+
+---
+
+## Interface da aplicação
+
+A aplicação usa uma interface com:
+
+- **Header** com progresso de orçamento (dot-matrix de 32 pontos) e saldo disponível
+- **3 cards de resumo**: Entradas, Despesas, Lançamentos
+- **Gráfico de barras** comparando entradas vs despesas por mês
+- **Lista de despesas** recentes com exclusão inline
+- **3 formulários em abas**: Entradas, Saída Manual, Nota Fiscal
+- **Módulo `/instrucoes`** com guia completo do trabalho
 
 ---
 
@@ -234,6 +233,7 @@ O relatório deve cobrir as três semanas em sequência e responder a cada mudan
 - `Jenkinsfile` com os estágios: Checkout, Install, Unit Tests, Build, E2E Tests, Deploy Vercel.
 - **23 cenários Cypress + Cucumber prontos e passando** para as features já implementadas.
 - Stubs `@todo` com descrição do que testar para cada desafio dos alunos.
+- Módulo `/instrucoes` com guia completo das 3 semanas.
 
 ## O que os alunos precisam concluir
 
@@ -242,8 +242,8 @@ O relatório deve cobrir as três semanas em sequência e responder a cada mudan
 - Finalizar a extração de nome do estabelecimento e valor a partir da nota fiscal (Feature 03).
 - Persistir a saída extraída como despesa no Firestore.
 - Completar a integração Jenkins → GitHub → Vercel sem expor secrets.
-- Semana 2: migrar de Cypress para Playwright + Cucumber.
-- Semana 3: escrever testes equivalentes no testRigor e fazer a análise comparativa.
+- Semana 2: migrar de Cypress para Playwright.
+- Semana 3: escrever testes equivalentes no TestRigor e fazer a análise comparativa.
 
 ---
 

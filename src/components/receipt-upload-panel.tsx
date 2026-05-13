@@ -96,62 +96,86 @@ export function ReceiptUploadPanel({
   }
 
   return (
-    <section className="glass-panel animate-enter rounded-[36px] border border-[color:var(--border)] px-5 py-6 sm:px-7 sm:py-7">
-      <div className="flex flex-col gap-3">
+    <section className="data-panel animate-enter">
+      {/* Panel header */}
+      <div className="data-panel-header flex items-center gap-3">
+        <div className="h-5 w-[3px] rounded-full bg-[var(--accent-clay)]" />
         <div>
-          <p className="section-eyebrow">Feature 03</p>
-          <h2 className="mt-3 text-2xl font-semibold text-[color:var(--foreground)]">
-            Saída por leitura de PDF ou imagem
+          <p className="section-eyebrow" style={{ color: "var(--accent-clay)" }}>
+            Feature 03
+          </p>
+          <h2 className="mt-0.5 text-[1rem] font-semibold text-[var(--foreground)]">
+            Nota fiscal — PDF ou imagem
           </h2>
         </div>
-        <p className="text-sm leading-7 text-[color:var(--muted)]">
-          O fluxo de upload, a rota de extração e o serviço cliente já existem,
-          mas a leitura real da nota fiscal e o salvamento da despesa ainda
-          estão marcados com `TODO implement`.
-        </p>
       </div>
 
-      <div className="mt-8 space-y-5">
-        <div className="rounded-[28px] border border-[rgba(31,138,112,0.16)] bg-[rgba(240,252,248,0.8)] p-4 text-sm leading-7 text-[color:var(--foreground)]">
-          <p className="font-medium">Fluxo esperado da atividade</p>
-          <p>1. Selecionar uma nota fiscal em imagem ou PDF.</p>
-          <p>2. Enviar o arquivo para `/api/receipt-extraction`.</p>
-          <p>3. Extrair nome do local e valor da compra.</p>
-          <p>4. Salvar o resultado como saída (despesa) no Firestore.</p>
+      <div className="px-5 pb-5 pt-4 space-y-3.5">
+        <p className="text-[11.5px] leading-[1.65] text-[var(--muted)]">
+          O fluxo de upload, a rota de extração e o serviço cliente já existem,
+          mas a leitura real da nota e o salvamento ainda estão marcados com{" "}
+          <code className="rounded bg-[rgba(31,42,34,0.07)] px-1 text-[10.5px] text-[var(--foreground)]">
+            TODO implement
+          </code>
+          .
+        </p>
+
+        {/* Flow steps */}
+        <div className="rounded-xl border border-[rgba(31,138,112,0.14)] bg-[rgba(240,252,248,0.65)] px-4 py-3">
+          <p className="mb-1.5 font-mono text-[9.5px] font-semibold tracking-[0.18em] text-[var(--accent-forest)] uppercase">
+            Fluxo esperado
+          </p>
+          <ol className="space-y-0.5">
+            {[
+              "Selecionar nota fiscal em imagem ou PDF.",
+              "Enviar arquivo para /api/receipt-extraction.",
+              "Extrair nome do local e valor da compra.",
+              "Salvar resultado como despesa no Firestore.",
+            ].map((step, i) => (
+              <li
+                key={i}
+                className="flex items-start gap-2 text-[11px] leading-[1.6] text-[var(--muted)]"
+              >
+                <span className="mt-px font-mono text-[9px] text-[var(--accent-forest)]">
+                  {i + 1}.
+                </span>
+                {step}
+              </li>
+            ))}
+          </ol>
         </div>
 
-        <div className="space-y-2">
-          <label
-            className="text-sm font-medium text-[color:var(--foreground)]"
-            htmlFor={inputId}
-          >
+        {/* File input */}
+        <div>
+          <label className="field-label" htmlFor={inputId}>
             Arquivo da nota fiscal
           </label>
           <input
             accept="application/pdf,image/jpeg,image/png,image/webp"
-            className="w-full rounded-[22px] border border-[rgba(31,42,34,0.14)] bg-white/88 px-4 py-3 text-sm outline-none transition focus:border-[color:var(--accent-forest)] focus:ring-4 focus:ring-[rgba(31,138,112,0.12)]"
+            className="field-input cursor-pointer file:mr-3 file:rounded-lg file:border-0 file:bg-[rgba(31,42,34,0.07)] file:px-2.5 file:py-1 file:text-[10.5px] file:font-medium file:text-[var(--foreground)] file:tracking-wide hover:file:bg-[rgba(31,42,34,0.12)]"
             id={inputId}
             onChange={handleFileChange}
             type="file"
           />
-          <p className="text-xs leading-6 text-[color:var(--muted)]">
-            Tipos aceitos na base: {getSupportedReceiptTypesLabel()}.
+          <p className="mt-1 text-[10.5px] leading-[1.55] text-[var(--muted)]/70">
+            Tipos aceitos: {getSupportedReceiptTypesLabel()}.
           </p>
           {selectedFile ? (
-            <p className="text-sm leading-6 text-[color:var(--foreground)]">
-              Arquivo pronto para análise: <strong>{selectedFile.name}</strong>
+            <p className="mt-1 text-[11.5px] font-medium text-[var(--foreground)]">
+              {selectedFile.name}
             </p>
           ) : null}
         </div>
 
+        {/* Feedback */}
         {feedback ? (
           <p
-            className={`rounded-[22px] border px-4 py-3 text-sm leading-6 ${
+            className={`rounded-xl border px-3.5 py-2.5 text-[11.5px] leading-[1.6] ${
               feedback.tone === "success"
-                ? "border-[rgba(31,138,112,0.18)] bg-[rgba(240,252,248,0.95)] text-[color:var(--accent-forest)]"
+                ? "border-[rgba(31,138,112,0.18)] bg-[rgba(240,252,248,0.9)] text-[var(--accent-forest)]"
                 : feedback.tone === "error"
-                  ? "border-[rgba(201,92,84,0.18)] bg-[rgba(255,244,243,0.95)] text-[color:var(--accent-clay)]"
-                  : "border-[rgba(31,42,34,0.12)] bg-white/90 text-[color:var(--foreground)]"
+                  ? "border-[rgba(201,92,84,0.18)] bg-[rgba(255,244,243,0.9)] text-[var(--accent-clay)]"
+                  : "border-[rgba(31,42,34,0.1)] bg-white/70 text-[var(--foreground)]"
             }`}
             role={feedback.tone === "error" ? "alert" : "status"}
           >
@@ -159,30 +183,31 @@ export function ReceiptUploadPanel({
           </p>
         ) : null}
 
-        <div className="flex flex-col gap-3 sm:flex-row">
+        {/* Actions */}
+        <div className="flex gap-2.5">
           <button
-            className="rounded-full bg-[color:var(--foreground)] px-5 py-3 text-sm font-semibold tracking-[0.08em] text-white uppercase transition hover:-translate-y-0.5 hover:bg-[rgba(31,42,34,0.92)] disabled:cursor-not-allowed disabled:opacity-60"
+            className="flex-1 rounded-xl bg-[var(--accent-clay)] px-4 py-2.5 text-[11.5px] font-semibold tracking-[0.1em] text-white uppercase transition hover:bg-[rgba(201,92,84,0.88)] hover:shadow-[0_4px_16px_rgba(201,92,84,0.28)] hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50"
             disabled={isAnalyzing || isSubmitting}
             onClick={() => void handleAnalyzeReceipt()}
             type="button"
           >
-            {isAnalyzing ? "Analisando..." : "Analisar nota fiscal"}
+            {isAnalyzing ? "Analisando…" : "Analisar nota"}
           </button>
           <button
-            className="rounded-full border border-[rgba(31,42,34,0.12)] bg-white px-5 py-3 text-sm font-semibold tracking-[0.08em] text-[color:var(--foreground)] uppercase transition hover:-translate-y-0.5"
+            className="rounded-xl border border-[rgba(31,42,34,0.12)] bg-white/70 px-3.5 py-2.5 text-[11.5px] font-semibold tracking-[0.08em] text-[var(--muted)] uppercase transition hover:bg-white hover:text-[var(--foreground)]"
             onClick={() => {
               setSelectedFile(null);
               setFeedback(null);
             }}
             type="button"
           >
-            Limpar arquivo
+            Limpar
           </button>
         </div>
-      </div>
 
-      {/* TODO implement: exibir os dados extraídos em campos editáveis antes do salvamento final. */}
-      {/* TODO implement: adicionar preview da nota fiscal para apoiar a revisão manual. */}
+        {/* TODO implement: exibir os dados extraídos em campos editáveis antes do salvamento final. */}
+        {/* TODO implement: adicionar preview da nota fiscal para apoiar a revisão manual. */}
+      </div>
     </section>
   );
 }

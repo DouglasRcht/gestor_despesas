@@ -87,10 +87,5 @@ export async function extractExpenseFromReceipt(
     );
   }
 
-  // TODO implement: validar o contrato retornado pela rota de OCR.
-  // TODO implement: confirmar se establishmentName e amount vieram preenchidos.
-  // TODO implement: permitir ajustes manuais antes de persistir a despesa.
-  throw new Error(
-    "TODO implement: conclua o mapeamento da nota fiscal para uma despesa válida.",
-  );
+  return mapReceiptExtractionToExpense(payload as ReceiptExtractionApiResult);
 }
